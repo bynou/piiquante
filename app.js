@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const userRoutes = require("./routes/user");
 
-// petit a petit a supp
-const Sauce = require("./models/Sauce");
+const userRoutes = require("./routes/user");
+const sauceRoutes = require("./routes/sauce");
+
 const app = express();
 //Pour gerer la requete Post venant de l'appli front end afin
 // d'extraire le corps json
@@ -29,23 +29,8 @@ app.use((req, res, next) => {
   );
   next();
 });
-// chemin vers le router
+// chemin vers les routers
 app.use("/api/auth", userRoutes);
+app.use("/api/sauces", sauceRoutes);
 
-//Création route get et Post
-app.post("/api/sauces", (req, res, next) => {
-  delete req.body._id;
-  const sauce = new Sauce({
-    ...req.body,
-  });
-  sauce
-    .save()
-    .then(() => res.status(201).json({ message: "Objet créé" }))
-    .catch((error) => res.status(400).json({ error }));
-});
-app.get("/api/sauces", (req, res, next) => {
-  Sauce.find()
-    .then((sauces) => res.status(200).json(sauces))
-    .catch((error) => res.status(400).json({ error }));
-});
 module.exports = app;
