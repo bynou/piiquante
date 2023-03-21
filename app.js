@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+//On déclare ici les chemins vers les différents routeurs
 const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
 
@@ -8,7 +9,8 @@ const app = express();
 //Pour gerer la requete Post venant de l'appli front end afin
 // d'extraire le corps json
 app.use(express.json());
-//Connexion a la base de donné
+
+//Connexion a la base de donné MongoDB
 mongoose
   .connect(
     "mongodb+srv://test1:test1@cluster0.jkylchx.mongodb.net/?retryWrites=true&w=majority",
