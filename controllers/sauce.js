@@ -27,3 +27,15 @@ exports.displaySauce = (req, res, next) => {
     .then((sauce) => res.status(200).json(sauce))
     .catch((error) => res.status(404).json({ error: error }));
 };
+//Fonction PUT pour modifier une sauce
+exports.modifySauce = (req, res, next) => {
+  Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+    .then(() => res.status(200).json({ message: "Sauce modifiée !" }))
+    .catch((error) => res.status(400).json({ error }));
+};
+//Fonction DELETE sauce
+exports.deleteSauce = (req, res, next) => {
+  Sauce.deleteOne({ _id: req.params.id })
+    .then(() => res.status(200).json({ message: "Objet supprimé !" }))
+    .catch((error) => res.status(400).json({ error }));
+};
