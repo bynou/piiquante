@@ -44,6 +44,12 @@ exports.modifySauce = (req, res, next) => {
       if (sauce.userId != req.auth.userId) {
         res.status(400).json({ message: "Non autorisé" });
       } else {
+        Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+          //On déclare le nom de l'ancienne img de la sauce
+          const previousImg = sauce.imageUrl.split("/")[4];
+          // On utilise la précedente déclaration pour la supprimer du dossier img
+          fs.unlink(`images/${previousImg}`, () => {});
+        });
         Sauce.updateOne(
           { _id: req.params.id },
           { ...sauceObject, _id: req.params.id }
