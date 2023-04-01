@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+require("dotenv").config();
+// Importation helmet
+const helmet = require("helmet");
 //On déclare ici les chemins vers les différents routeurs
 const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
@@ -15,13 +17,14 @@ app.use(express.json());
 
 //Connexion a la base de donné MongoDB
 mongoose
-  .connect(
-    "mongodb+srv://test1:test1@cluster0.jkylchx.mongodb.net/?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.mongoLogs, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 // Autorisation CORS
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -34,6 +37,13 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+//Utilisation des middleware Helmet
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 // chemin vers les routers
 app.use("/api/auth", userRoutes);
 app.use("/api/sauces", sauceRoutes);
